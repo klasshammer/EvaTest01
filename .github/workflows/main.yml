@@ -12,12 +12,12 @@ jobs:
     with:
       path: .
   call-checkov-workflow:
-    name: Call Terraform Workflow
+    name: Call Checkov Workflow
     uses: ./.github/workflows/checkov.yml
     with:
       path: .
   call-opa-workflow:
-    name: Call Terraform Workflow
+    name: Call OPA Workflow
     uses: ./.github/workflows/opa.yml
     with:
       path: .
