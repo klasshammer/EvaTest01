@@ -1,18 +1,40 @@
-name: Main Terraform Trigger
+name: Terraform Action
 
 on:
-  pull_request:
-    branches:
-      - main
+  workflow_call:
+    inputs:
+      path:
+        description: "Path to the Terraform code"
+        required: true
+        type: string
 
 jobs:
-  call-terraform-workflow:
-    name: Call Terraform Workflow
-    uses: ./.github/workflows/terraform.yml
-    with:
-      path: EA1/ACT1.7
-  call-checkov-workflow:
-    name: Call Terraform Workflow
-    uses: ./.github/workflows/checkov.yml
-    with:
-      path: EA1/ACT1.8
+  terraform:
+    name: Terraform Checks
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+
+      - name: Terraform Init
+        working-directory: ${{ inputs.path }}
+        run: terraform init
+
+      - name: Run Terraform FMT
+        run: terraform fmt -check -recursive ${{ inputs.path }}
+
+      - name: Run Terraform Validate
+        working-directory: ${{ inputs.path }}
+        run: terraform validate
+
+      - name: Install TFLint
+        run: |
+          curl -s https://raw.githubusercontent.com/terraform-linters/tflint/master/install_linux.sh | bash
+
+      - name: Run TFLint
+        working-directory: ${{ inputs.path }}
+        run: tflint --minimum-failure-severity=error
