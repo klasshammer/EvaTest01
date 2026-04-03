@@ -16,3 +16,8 @@ jobs:
     uses: ./.github/workflows/checkov.yml
     with:
       path: .
+  call-opa-workflow:
+    name: Call Terraform Workflow
+    uses: ./.github/workflows/opa.yml
+    with:
+      path: .
