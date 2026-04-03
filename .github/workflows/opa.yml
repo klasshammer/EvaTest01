@@ -1,4 +1,5 @@
 name: Run OPA Tests
+on:
   workflow_call:
     inputs:
       path:
