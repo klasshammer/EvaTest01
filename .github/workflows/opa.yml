@@ -20,3 +20,7 @@ jobs:
 
     - name: Run OPA Tests
       run: opa test ${{ inputs.path }}/*.rego -v
+
+
+    - name: Run OPA Eval
+      run: opa eval --data terraform.security.rego  
